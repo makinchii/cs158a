@@ -1,0 +1,14 @@
+2026-09-07 20:08:26,579 My UUID: fba45dcd-ff9a-4475-b89f-571f51016f5a
+2026-09-07 20:08:26,580 Listening on 127.0.0.1:5002
+2026-09-07 20:08:26,728 Previous neighbor connected from 127.0.0.1:49676
+2026-09-07 20:08:27,596 Next neighbor is not ready; retrying in one second
+2026-09-07 20:08:29,616 Next neighbor is not ready; retrying in one second
+2026-09-07 20:08:30,617 Connected to next neighbor at 127.0.0.1:5003
+2026-09-07 20:08:30,617 Sent: uuid=fba45dcd-ff9a-4475-b89f-571f51016f5a, flag=0
+2026-09-07 20:08:30,617 Received: uuid=4e8e1d19-0157-4cec-a5ed-5115ea41ab56, flag=0, less, 0
+2026-09-07 20:08:30,617 Ignored: uuid=4e8e1d19-0157-4cec-a5ed-5115ea41ab56, flag=0
+2026-09-07 20:08:30,629 Received: uuid=fba45dcd-ff9a-4475-b89f-571f51016f5a, flag=0, same, 0
+2026-09-07 20:08:30,633 Leader is fba45dcd-ff9a-4475-b89f-571f51016f5a
+2026-09-07 20:08:30,634 Sent: uuid=fba45dcd-ff9a-4475-b89f-571f51016f5a, flag=1
+2026-09-07 20:08:30,634 Received: uuid=fba45dcd-ff9a-4475-b89f-571f51016f5a, flag=1, same, 1, leader_id=fba45dcd-ff9a-4475-b89f-571f51016f5a
+2026-09-07 20:08:30,634 Leader announcement returned to the leader; terminating.

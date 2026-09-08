@@ -1,0 +1,14 @@
+2026-09-07 20:08:22,196 My UUID: 4e8e1d19-0157-4cec-a5ed-5115ea41ab56
+2026-09-07 20:08:22,197 Listening on 127.0.0.1:5001
+2026-09-07 20:08:23,199 Next neighbor is not ready; retrying in one second
+2026-09-07 20:08:25,214 Next neighbor is not ready; retrying in one second
+2026-09-07 20:08:26,728 Connected to next neighbor at 127.0.0.1:5002
+2026-09-07 20:08:30,362 Previous neighbor connected from 127.0.0.1:49680
+2026-09-07 20:08:30,362 Sent: uuid=4e8e1d19-0157-4cec-a5ed-5115ea41ab56, flag=0
+2026-09-07 20:08:30,617 Received: uuid=45578518-baf0-46eb-a040-cd80f9fa8155, flag=0, less, 0
+2026-09-07 20:08:30,617 Ignored: uuid=45578518-baf0-46eb-a040-cd80f9fa8155, flag=0
+2026-09-07 20:08:30,618 Received: uuid=fba45dcd-ff9a-4475-b89f-571f51016f5a, flag=0, greater, 0
+2026-09-07 20:08:30,629 Sent: uuid=fba45dcd-ff9a-4475-b89f-571f51016f5a, flag=0
+2026-09-07 20:08:30,634 Received: uuid=fba45dcd-ff9a-4475-b89f-571f51016f5a, flag=1, greater, 0
+2026-09-07 20:08:30,634 Leader is fba45dcd-ff9a-4475-b89f-571f51016f5a
+2026-09-07 20:08:30,634 Sent: uuid=fba45dcd-ff9a-4475-b89f-571f51016f5a, flag=1

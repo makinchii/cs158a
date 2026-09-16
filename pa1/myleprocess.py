@@ -1,7 +1,7 @@
 """A unidirectional asynchronous-ring leader-election process.
 
 The node receives messages through its server connection and forwards messages
-through its client connection.  Messages are newline-delimited JSON objects.
+through its client connection.  Messages are JSON objects ending with `}`.
 """
 
 import argparse
@@ -104,10 +104,10 @@ class ElectionNode:
                 time.sleep(1)
 
     def send_message(self, message):
-        """Send one newline-delimited JSON message to the next node."""
+        """Send one JSON message to the next node."""
 
         # converts message to JSON and sends it to the next node
-        self.outgoing_socket.sendall((message.to_json() + "\n").encode("utf-8"))
+        self.outgoing_socket.sendall(message.to_json().encode("utf-8"))
         self.log("Sent: uuid=%s, flag=%s", message.uuid, message.flag)
 
     def receive_log(self, message):
@@ -194,11 +194,18 @@ class ElectionNode:
         # Sends the node's UUID
         self.send_message(Message(self.my_id, 0))
 
-        # loop to handle incoming messages
+        # I use the closing curly bracket "}" to identify the end of each message.
         with self.incoming_socket.makefile("r", encoding="utf-8") as reader:
-            for line in reader:
-                if line.strip() and self.handle_message(Message.from_json(line)):
-                    return
+            message_text = ""
+            while True:
+                character = reader.read(1)
+                if not character:
+                    break
+                message_text += character
+                if character == "}":
+                    if self.handle_message(Message.from_json(message_text)):
+                        return
+                    message_text = ""
 
 
 def main():

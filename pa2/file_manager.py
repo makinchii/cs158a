@@ -5,6 +5,8 @@ from __future__ import annotations
 import threading
 from pathlib import Path
 
+import protocol
+
 # Prefix for files that are still being copied into shared/. They are never
 # listed, so a half copied file can't be advertised or served.
 TEMP_PREFIX = ".incoming-"
@@ -108,3 +110,54 @@ class FileManager:
         files = list(message["files"])
         with self._lock:
             self._available[peer_id] = files
+
+    def request_file(self, peer_id: str, filename: str) -> None:
+        if not self._is_safe_name(filename):
+            raise ValueError(f"unsafe file name: {filename!r}")
+        if filename in self.get_local_files():
+            raise ValueError(f"already have {filename} in shared/")
+        with self._lock:
+            if filename not in self._available.get(peer_id, []):
+                raise ValueError(f"{peer_id} does not advertise {filename}")
+            self._pending.add((peer_id, filename))
+        # Send outside the lock, sending can be slow or fail.
+        try:
+            self._peers.send_to_peer(
+                peer_id, {"type": "FILE_REQUEST", "filename": filename}
+            )
+        except Exception:
+            with self._lock:
+                self._pending.discard((peer_id, filename))
+            raise
+
+    def handle_file_request(self, peer_id: str, message: dict) -> None:
+        filename = message["filename"]
+        path = self._shared / filename
+        if not self._is_safe_name(filename) or not path.is_file():
+            self._send_error(peer_id, filename, "File not found")
+            return
+        try:
+            content = protocol.encode_file_content(path.read_bytes())
+            reply = {"type": "FILE_DATA", "filename": filename, "content": content}
+            self._peers.send_to_peer(peer_id, reply)
+        except ConnectionError:
+            pass  # peer is gone, nothing to tell
+        except OSError:
+            self._send_error(peer_id, filename, "Could not read file")
+        except ValueError:
+            # ProtocolError is a ValueError, mostly "file too big" here.
+            self._send_error(peer_id, filename, "File is too large to send")
+
+    def _send_error(self, peer_id: str, filename: str, reason: str) -> None:
+        error = {"type": "FILE_ERROR", "filename": filename, "reason": reason}
+        try:
+            self._peers.send_to_peer(peer_id, error)
+        except ConnectionError:
+            pass
+
+    def handle_file_error(self, peer_id: str, message: dict) -> None:
+        # Not fatal, the connection stays open. Just stop waiting for it.
+        filename = message["filename"]
+        with self._lock:
+            self._pending.discard((peer_id, filename))
+        print(f"[files] {peer_id} could not send {filename}: {message['reason']}")

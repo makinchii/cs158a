@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import shutil
 import threading
 from pathlib import Path
 
@@ -161,3 +162,36 @@ class FileManager:
         with self._lock:
             self._pending.discard((peer_id, filename))
         print(f"[files] {peer_id} could not send {filename}: {message['reason']}")
+
+    def handle_file_data(self, peer_id: str, message: dict) -> None:
+        filename = message["filename"]
+        with self._lock:
+            wanted = (peer_id, filename) in self._pending
+            self._pending.discard((peer_id, filename))
+        # Ignore data we never asked for, and names that could escape the dir.
+        if not wanted or not self._is_safe_name(filename):
+            return
+        try:
+            data = protocol.decode_file_content(message["content"])
+            self._save_download(filename, data)
+        except (ValueError, OSError) as exc:
+            print(f"[files] download of {filename} failed: {exc}")
+            return
+        print(f"[files] downloaded {filename} from {peer_id}")
+
+    def _save_download(self, filename: str, data: bytes) -> None:
+        # Step 1: write the whole file into downloads/ first.
+        staged = self._downloads / filename
+        part = self._downloads / (TEMP_PREFIX + filename)
+        part.write_bytes(data)
+        part.replace(staged)
+
+        # Step 2: copy into shared/ only now that it is complete. The copy goes
+        # to a temp name first so a file list never sees it half written.
+        with self._publish_lock:
+            target = self._shared / filename
+            if target.exists():
+                return  # same name = same file, keep the one we have
+            temp = self._shared / (TEMP_PREFIX + filename)
+            shutil.copyfile(staged, temp)
+            temp.replace(target)

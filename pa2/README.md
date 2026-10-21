@@ -2,8 +2,7 @@
 
 This directory contains Member 1's protocol, public interfaces, logging, CLI,
 and application coordinator. `peer.py` belongs to Member 2 and
-`file_manager.py` belongs to Member 3; they are intentionally not implemented
-here. The protocol and APIs below are concrete proposed contracts that the
+`file_manager.py` belongs to Member 3 (now implemented). The protocol and APIs below are concrete proposed contracts that the
 group should review before treating them as frozen.
 
 ## Architecture and ownership

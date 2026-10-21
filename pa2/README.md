@@ -2,8 +2,7 @@
 
 This directory contains Member 1's protocol, public interfaces, logging, CLI,
 and application coordinator. `peer.py` belongs to Member 2 and
-`file_manager.py` belongs to Member 3; they are intentionally not implemented
-here. The protocol and APIs below are concrete proposed contracts that the
+`file_manager.py` belongs to Member 3 (now implemented). The protocol and APIs below are concrete proposed contracts that the
 group should review before treating them as frozen.
 
 ## Architecture and ownership
@@ -347,3 +346,23 @@ The group still must choose and document:
 
 No automated test suite, CI configuration, invented demo output, or substitute
 network/file implementation is included.
+
+## Division of work
+
+We split the project into three parts and agreed on the message format
+before anyone started coding.
+
+- An Ngo did the protocol and the shared pieces: `protocol.py` (message
+  validation, JSON, TCP length prefix, base64), `interfaces.py`, `logger.py`,
+  `cli.py`, `agent.py`, and the team handoff doc so the rest of us knew what
+  to plug into.
+- Kevin Chau did the networking in `peer.py`: UDP broadcast and listening on
+  port 54321, the TCP accept loop and connections, the peer table, and the
+  receive threads that notice when a peer leaves.
+- Marl Jonson did `file_manager.py`: reading `shared/`, the table of what each
+  peer has, sending the file list on connect and every 10 seconds, handling
+  file requests and the FILE_ERROR reply, and saving downloads to `downloads/`
+  before copying them into `shared/`. Marl also added the sample files in
+  `shared/`.
+
+The commit history on GitHub shows who wrote what.

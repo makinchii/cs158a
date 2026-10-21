@@ -1,0 +1,17 @@
+P2P agent ready. Type 'help' for commands.
+p2p> peers
+Connected peers: node-B, node-C, node-D, node-E
+p2p> files
+Available files:
+  node-B: recipe.txt
+  node-C: todo.txt
+  node-D: poem.txt
+  node-E: schedule.csv
+p2p> peers
+Connected peers: node-B, node-D, node-E
+p2p> files
+Available files:
+  node-B: hello.txt, recipe.txt
+  node-D: poem.txt
+  node-E: schedule.csv
+p2p> quit

@@ -1,0 +1,22 @@
+P2P agent ready. Type 'help' for commands.
+p2p> peers
+Connected peers: node-A, node-C, node-D, node-E
+p2p> files
+Available files:
+  node-A: data.csv, hello.txt, notes.txt, old_draft.txt
+  node-C: todo.txt
+  node-D: poem.txt
+  node-E: schedule.csv
+p2p> download node-A hello.txt
+Requested 'hello.txt' from 'node-A'; completion is asynchronous.
+[files] downloaded hello.txt from node-A
+p2p> shared
+Local shared files: hello.txt, recipe.txt
+p2p> peers
+Connected peers: node-A, node-D, node-E
+p2p> files
+Available files:
+  node-A: data.csv, hello.txt, notes.txt
+  node-D: poem.txt
+  node-E: schedule.csv
+p2p> quit

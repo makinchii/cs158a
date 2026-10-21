@@ -1,0 +1,13 @@
+P2P agent ready. Type 'help' for commands.
+p2p> peers
+Connected peers: node-A, node-B, node-D, node-E
+p2p> files
+Available files:
+  node-A: data.csv, hello.txt, notes.txt, old_draft.txt
+  node-B: recipe.txt
+  node-D: poem.txt
+  node-E: schedule.csv
+p2p> download node-A old_draft.txt
+Requested 'old_draft.txt' from 'node-A'; completion is asynchronous.
+[files] node-A could not send old_draft.txt: File not found
+p2p> quit

@@ -7,7 +7,9 @@ from pathlib import Path
 from typing import Sequence
 
 from cli import CLI
+from file_manager import FileManager
 from logger import AgentLogger
+from peer import PeerManager
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -30,18 +32,7 @@ def _validate_args(parser: argparse.ArgumentParser, args: argparse.Namespace) ->
 
 
 def run(args: argparse.Namespace) -> None:
-    """Construct, wire, run, and reliably stop the three owned components."""
-    # Delayed imports keep Member 1 modules importable and CLI-checkable before
-    # the independently owned implementations are added to the repository.
-    try:
-        from peer import PeerManager
-        from file_manager import FileManager
-    except ImportError as exc:
-        raise RuntimeError(
-            "Integration is incomplete: Member 2 must provide peer.py with "
-            "PeerManager and Member 3 must provide file_manager.py with FileManager."
-        ) from exc
-
+    """Construct, wire, run, and reliably stop the networking and file components."""
     shared_dir = Path(args.shared_dir)
     downloads_dir = Path(args.downloads_dir)
     shared_dir.mkdir(parents=True, exist_ok=True)

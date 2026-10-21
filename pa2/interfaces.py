@@ -1,7 +1,8 @@
-"""Public contracts joining the independently owned PA2 components.
+"""Public contracts joining the PA2 components.
 
-Member 2 implements ``PeerManagerContract``. Member 3 implements
-``FileManagerContract``. Member 1's CLI and coordinator use only these APIs.
+``peer.PeerManager`` implements ``PeerManagerContract`` and
+``file_manager.FileManager`` implements ``FileManagerContract``. The CLI and
+``agent.py`` use only these APIs.
 """
 
 from __future__ import annotations
@@ -28,7 +29,7 @@ class LoggerContract(Protocol):
 
 
 class PeerManagerContract(Protocol):
-    """Member 2's required thread-safe public interface.
+    """Thread-safe public interface of the networking layer (peer.py).
 
     Handler and lifecycle callbacks run on networking threads and must always
     be invoked outside peer-table locks. Each registration adds one callback;
@@ -70,7 +71,7 @@ class PeerManagerContract(Protocol):
 
 
 class FileManagerContract(Protocol):
-    """Member 3's required thread-safe public interface.
+    """Thread-safe public interface of the file layer (file_manager.py).
 
     Construction must not launch workers; resource acquisition belongs in
     start(), with stop() able to clean up a partially completed start().
